@@ -59,7 +59,7 @@
             <div class="form-group">
                 <label asp-for="NewTask.Status" class="control-label">Status:</label>
                 <span asp-validation-for="NewTask.Status" class="text-danger"></span>
-                <select id="Status">
+                <select asp-for="NewTask.Status" class="form-control" id="Status" name="UpdatedTask.Status">
                     <option value="@Status.NotStarted">Not started</option>
                     <option value="@Status.InProgress">In progress</option>
                     <option value="@Status.Completed">Completed</option>
