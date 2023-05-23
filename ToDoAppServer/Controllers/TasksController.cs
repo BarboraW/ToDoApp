@@ -43,14 +43,25 @@ namespace ToDoAppServer.Controllers
         [HttpGet("{id}")]
         public ActionResult<TaskObjDto> GetTaskById(Guid id)
         {
-            var task = collection.GetTaskById(id);
+            try
+            {
+                var task = collection.GetTaskById(id);
+                return task.AsDto();
+            }
 
-            if (task is null)
+            catch (Exception ex)
             {
                 return NotFound();
             }
 
-            return task.AsDto();
+            //var task = collection.GetTaskById(id);
+
+            //if (task is null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return task.AsDto();
         }
 
         /// <summary>
@@ -91,22 +102,24 @@ namespace ToDoAppServer.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateTask(Guid id, UpdateTaskObjDto taskDto)
         {
-            var existingTask = collection.GetTaskById(id);
-
-            if (existingTask is null) 
+            try
             {
-                return NotFound();
+                var existingTask = collection.GetTaskById(id);
+                var updatedTask = existingTask with
+                {
+                    Name = taskDto.Name,
+                    Status = taskDto.Status,
+                    Priority = taskDto.Priority,
+                };
+
+                collection.UpdateTask(updatedTask);
+                return NoContent();
             }
 
-            var updatedTask = existingTask with
+            catch (Exception ex)
             {
-                Name = taskDto.Name,
-                Status = taskDto.Status,
-                Priority = taskDto.Priority,
-            };
-
-            collection.UpdateTask(updatedTask);
-            return NoContent();
+                return NotFound(ex);
+            }
         }
 
         /// <summary>
@@ -117,21 +130,25 @@ namespace ToDoAppServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteItem(Guid id) 
         {
-            var existingTask = collection.GetTaskById(id);
+            try
+            {
+                var existingTask = collection.GetTaskById(id);
 
-            if (existingTask is null)
+                if (existingTask.Status != Status.Completed)
+                {
+                    return BadRequest("Delete is only allowed for completed tasks.");
+                }
+
+                collection.DeleteTask(id);
+
+                return NoContent();
+
+            }
+
+            catch (Exception ex)
             {
                 return NotFound();
             }
-
-            if (existingTask.Status != Status.Completed)
-            {
-                return BadRequest("Delete is only allowed for completed tasks.");
-            }
-
-            collection.DeleteTask(id);
-
-            return NoContent();
         }
     }
 }

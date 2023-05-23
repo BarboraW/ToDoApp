@@ -19,6 +19,10 @@ namespace ToDoAppServer.Repositories
         public TaskObj GetTaskById(Guid id) 
         {
             var task = tasks.SingleOrDefault(taskobj => taskobj.ID == id);
+            if (task == null)
+            {
+                throw new InvalidOperationException("Task not found.");
+            }
             return task;
         }
 
