@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Net;
 using ToDoAppClient.Models;
+using ToDoAppClient.Wrappers;
 
 namespace ToDoAppClient.Pages
 {
@@ -11,7 +12,7 @@ namespace ToDoAppClient.Pages
     /// </summary>
     public class TasksListModel : PageModel
     {
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientWrapper _httpClient;
 
         public List<TaskModel>? Tasks { get; set; }
 
@@ -22,7 +23,7 @@ namespace ToDoAppClient.Pages
         /// Initializes a new instance of the <see cref="TasksListModel"/> class.
         /// </summary>
         /// <param name="httpClient">The <see cref="HttpClient"/> instance used for HTTP requests.</param>
-        public TasksListModel(HttpClient httpClient)
+        public TasksListModel(IHttpClientWrapper httpClient)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
@@ -47,15 +48,11 @@ namespace ToDoAppClient.Pages
             {
                 try
                 {
-                    // Convert the new task to JSON
                     var task = NewTask;
-
-                    // Send the HTTP POST request to create the task
                     var response = await _httpClient.PostAsJsonAsync("https://localhost:44356/tasks", NewTask);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        // Task created successfully, reload the tasks from the server
                         await LoadTasksAsync();
                         return Page();
                     }
@@ -71,17 +68,14 @@ namespace ToDoAppClient.Pages
                 }
                 catch (HttpRequestException ex)
                 {
-                    // Handle the case where an HTTP request exception occurred
                     ModelState.AddModelError(string.Empty, "An error occurred while communicating with the server.");
                 }
                 catch (Exception ex)
                 {
-                    // Handle other types of exceptions if needed
                     ModelState.AddModelError(string.Empty, "An error occurred.");
                 }
             }
 
-            // If the model is invalid or an error occurred, return the same page with validation errors
             await LoadTasksAsync();
             return Page();
         }
