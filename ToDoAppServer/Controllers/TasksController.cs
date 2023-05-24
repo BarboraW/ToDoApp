@@ -70,7 +70,6 @@ namespace ToDoAppServer.Controllers
         {
             var tasks = collection.GetAllTasks();
 
-            // Check if a task with the same name already exists
             if (tasks.Any(t => t.Name == taskDto.Name))
             {
                 return BadRequest("A task with the same name already exists.");
