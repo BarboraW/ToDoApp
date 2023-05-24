@@ -1,17 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ToDoAppServer.Controllers;
 using ToDoAppServer.Dtos;
 using ToDoAppServer.Extensions;
 using ToDoAppServer.Models;
 using ToDoAppServer.Repositories;
-using Xunit;
 
 namespace ToDoAppServer.Tests
 {
