@@ -21,7 +21,7 @@ namespace ToDoAppClient.Pages
         /// <param name="httpClient">The <see cref="HttpClient"/> instance used for HTTP requests.</param>
         public DeleteTaskModel(HttpClient httpClient)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         /// <summary>
@@ -57,7 +57,6 @@ namespace ToDoAppClient.Pages
 
             if (!response.IsSuccessStatusCode)
             {
-                // Handle the error scenario
                 return NotFound();
             }
 

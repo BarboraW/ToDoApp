@@ -1,10 +1,12 @@
 using ToDoAppClient.Models;
+using ToDoAppClient.Wrappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<IHttpClientWrapper, HttpClientWrapper>();
 
 var app = builder.Build();
 

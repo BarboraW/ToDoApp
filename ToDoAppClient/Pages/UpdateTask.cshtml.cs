@@ -35,7 +35,6 @@ namespace ToDoAppClient.Pages
             var response = await _httpClient.GetAsync($"https://localhost:44356/tasks/{id}");
             if (!response.IsSuccessStatusCode)
             {
-                // Handle the error scenario
                 return NotFound();
             }
 
@@ -58,7 +57,6 @@ namespace ToDoAppClient.Pages
                 var response = await _httpClient.PutAsJsonAsync($"https://localhost:44356/tasks/{task.Id}", task);
                 if (!response.IsSuccessStatusCode)
                 {
-                    // Handle the error scenario
                     ModelState.AddModelError(string.Empty, "Task not found.");
                     return Page();
                 }
