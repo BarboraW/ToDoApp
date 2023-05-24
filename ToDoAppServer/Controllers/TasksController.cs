@@ -49,19 +49,15 @@ namespace ToDoAppServer.Controllers
                 return task.AsDto();
             }
 
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 return NotFound();
             }
 
-            //var task = collection.GetTaskById(id);
-
-            //if (task is null)
-            //{
-            //    return NotFound();
-            //}
-
-            //return task.AsDto();
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
 
         /// <summary>
@@ -116,9 +112,14 @@ namespace ToDoAppServer.Controllers
                 return NoContent();
             }
 
+            catch (InvalidOperationException ex)
+            {
+                return NotFound();
+            }
+
             catch (Exception ex)
             {
-                return NotFound(ex);
+                return StatusCode(500, "An unexpected error occurred.");
             }
         }
 
@@ -128,7 +129,7 @@ namespace ToDoAppServer.Controllers
         /// <param name="id">The ID of the task to delete.</param>
         /// <returns>No content.</returns>
         [HttpDelete("{id}")]
-        public IActionResult DeleteItem(Guid id) 
+        public IActionResult DeleteTask(Guid id) 
         {
             try
             {
@@ -145,9 +146,14 @@ namespace ToDoAppServer.Controllers
 
             }
 
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 return NotFound();
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
             }
         }
     }
